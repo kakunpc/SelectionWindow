@@ -9,7 +9,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace kakunpc
+namespace kakunpc.SelectionWindow
 {
     public class SelectionWindow : EditorWindow
     {
