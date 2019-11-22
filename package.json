@@ -1,11 +1,18 @@
 {
-    "name": "com.kakunpc.selectionwindow",
-    "displayName": "Selection Window",
-    "version": "1.0.0",
-    "unity": "2018.3",
-    "description": "よく使うProjectの項目を保存できる",
-    "keywords": ["Editor"],
-    "category": "Editor",
-    "dependencies": {
-    }
+  "name": "com.kakunpc.selectionwindow",
+  "displayName": "Selection Window",
+  "version": "1.0.0",
+  "unity": "2018.3",
+  "description": "よく使うProjectの項目を保存できる",
+  "keywords": [
+    "Editor"
+  ],
+  "category": "Editor",
+  "dependencies": {},
+  "homepage": "https://github.com/kakunpc/SelectionWindow",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:kakunpc/SelectionWindow.git"
+  },
+  "author": "kakunpc <15257475+kakunpc@users.noreply.github.com> (https://github.com/kakunpc/)"
 }
