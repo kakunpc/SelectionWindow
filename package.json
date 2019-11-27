@@ -1,7 +1,7 @@
 {
   "name": "com.kakunpc.selectionwindow",
   "displayName": "Selection Window",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "unity": "2018.3",
   "description": "よく使うProjectの項目を保存できる",
   "keywords": [
