@@ -12,13 +12,16 @@ or
 {
   "scopedRegistries": [
     {
-      "name": "kakunpc.com",
+      "name": "kakunpc",
       "url": "https://upm.kakunpc.com",
       "scopes": [
         "com.kakunpc"
       ]
     }
-  ]
+  ],
+  "dependencies": {
+    "com.kakunpc.selectionwindow": "1.0.5",
+  }
 }
 ```
 
