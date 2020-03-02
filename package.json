@@ -1,8 +1,8 @@
 {
   "name": "com.kakunpc.selectionwindow",
   "displayName": "Selection Window",
-  "version": "1.0.5",
-  "unity": "2018.4",
+  "version": "1.0.6",
+  "unity": "2019.1",
   "description": "\u3088\u304f\u4f7f\u3046Project\u306e\u9805\u76ee\u3092\u4fdd\u5b58\u3067\u304d\u308b",
   "keywords": [
     "Editor"
