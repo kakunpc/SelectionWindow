@@ -8,7 +8,6 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 
 namespace kakunpc.SelectionWindow
 {
@@ -21,28 +20,27 @@ namespace kakunpc.SelectionWindow
             window.titleContent.text = "SelectionWindow";
         }
 
-        void OnSceneGUI(SceneView sceneView)
+        private static void OnSceneGui(SceneView sceneView)
         {
-            if (string.IsNullOrEmpty(_noficationText) == false)
-            {
-                sceneView.ShowNotification(new GUIContent(_noficationText));
-                _noficationText = string.Empty;
-            }
+            if (string.IsNullOrEmpty(_notificationText)) return;
+            
+            sceneView.ShowNotification(new GUIContent(_notificationText));
+            _notificationText = string.Empty;
         }
 
         private static string LibraryPath => System.IO.Path.GetDirectoryName(Application.dataPath) + "/Library/";
-        static readonly string SettingsPath = "UserSelectionSetting.asset";
+        private const string SettingsPath = "UserSelectionSetting.asset";
 
         private static List<SelectionSetting> _selectionData = null;
 
         private Vector2 _pos = Vector2.zero;
 
-        private static string _noficationText = string.Empty;
+        private static string _notificationText = string.Empty;
 
         private void OnEnable()
         {
 #if UNITY_2019_1_OR_NEWER
-            SceneView.duringSceneGui += OnSceneGUI;
+            SceneView.duringSceneGui += OnSceneGui;
 #else
             SceneView.onSceneGUIDelegate += OnSceneGUI;
 #endif
@@ -51,7 +49,7 @@ namespace kakunpc.SelectionWindow
         private void OnDisable()
         {
 #if UNITY_2019_1_OR_NEWER
-            SceneView.duringSceneGui -= OnSceneGUI;
+            SceneView.duringSceneGui -= OnSceneGui;
 #else
             if (SceneView.onSceneGUIDelegate != null)
             {
@@ -76,8 +74,9 @@ namespace kakunpc.SelectionWindow
                 {
                     var data = _selectionData[i];
                     GUILayout.BeginHorizontal();
-                    string path = "", fileName = "", Ext = "";
-                    Action<float> jumpButton = (width) =>
+                    string path = "", fileName = "";
+
+                    void JumpButton(float width)
                     {
                         DisabledGroup(string.IsNullOrEmpty(data.GUID), () =>
                         {
@@ -85,19 +84,19 @@ namespace kakunpc.SelectionWindow
                             {
                                 var instanceId = GetInstanceIdFromGuid(data.GUID);
                                 Selection.activeInstanceID = instanceId;
-                                _noficationText = "JUMP:" + fileName;
+                                _notificationText = "JUMP:" + fileName;
                             }
                         });
-                    };
+                    }
 
                     if (string.IsNullOrEmpty(data.GUID) == false)
                     {
                         path = AssetDatabase.GUIDToAssetPath(data.GUID);
                         fileName = System.IO.Path.GetFileName(path);
-                        Ext = System.IO.Path.GetExtension(path);
+                        var ext = System.IO.Path.GetExtension(path);
 
                         // シーン開く
-                        if (Ext == ".unity")
+                        if (ext == ".unity")
                         {
                             DisabledGroup(EditorApplication.isPlaying, () =>
                             {
@@ -113,12 +112,12 @@ namespace kakunpc.SelectionWindow
                                     if (open)
                                     {
                                         EditorSceneManager.OpenScene(path);
-                                        _noficationText = "Open:" + fileName;
+                                        _notificationText = "Open:" + fileName;
                                     }
                                 }
                             });
                             GUILayout.Space(3);
-                            jumpButton(26f);
+                            JumpButton(26f);
                         }
 
                         // ソースファイルを開く
@@ -127,14 +126,14 @@ namespace kakunpc.SelectionWindow
                             if (GUILayout.Button("開", GUILayout.Width(26f)))
                             {
                                 UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal(path, 1);
-                                _noficationText = "Open:" + fileName;
+                                _notificationText = "Open:" + fileName;
                             }
                             GUILayout.Space(3);
                             jumpButton(26f);
                         }*/
                         else
                         {
-                            jumpButton(60f);
+                            JumpButton(60f);
                         }
                     }
                     else
@@ -211,14 +210,14 @@ namespace kakunpc.SelectionWindow
             _selectionData.Sort((x, y) => { return x.number - y.number; });
         }
 
-        static void DisabledGroup(bool state, Action gropuAction)
+        private static void DisabledGroup(bool state, Action gropuAction)
         {
             EditorGUI.BeginDisabledGroup(state);
             gropuAction();
             EditorGUI.EndDisabledGroup();
         }
 
-        static void Select(int id)
+        private static void Select(int id)
         {
             Load();
 
@@ -230,7 +229,7 @@ namespace kakunpc.SelectionWindow
             }
         }
 
-        static void SaveSelection(int id)
+        private static void SaveSelection(int id)
         {
             Load();
 
@@ -250,18 +249,18 @@ namespace kakunpc.SelectionWindow
             Save();
         }
 
-        static bool CheckSelection(int id)
+        private static bool CheckSelection(int id)
         {
             Load();
             return _selectionData.Exists(x => x.number == id);
         }
 
-        static bool CheckSelection()
+        private static bool CheckSelection()
         {
             return Selection.activeInstanceID != 0;
         }
 
-        static int GetInstanceIdFromGuid(string guid)
+        private static int GetInstanceIdFromGuid(string guid)
         {
             return AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(AssetDatabase.GUIDToAssetPath(guid)).GetInstanceID();
         }
