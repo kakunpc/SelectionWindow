@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace kakunpc.SelectionWindow
 {
@@ -40,15 +41,23 @@ namespace kakunpc.SelectionWindow
 
         private void OnEnable()
         {
+#if UNITY_2019_1_OR_NEWER
+            SceneView.duringSceneGui += OnSceneGUI;
+#else
             SceneView.onSceneGUIDelegate += OnSceneGUI;
+#endif
         }
 
         private void OnDisable()
         {
+#if UNITY_2019_1_OR_NEWER
+            SceneView.duringSceneGui -= OnSceneGUI;
+#else
             if (SceneView.onSceneGUIDelegate != null)
             {
                 SceneView.onSceneGUIDelegate -= OnSceneGUI;
             }
+#endif
         }
 
         private void OnGUI()
